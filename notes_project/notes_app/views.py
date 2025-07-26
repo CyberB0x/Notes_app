@@ -4,6 +4,8 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from .models import Note
 from django.http import HttpResponseForbidden
+from rest_framework import generics, permissions
+from .serializers import NoteSerializer
 
 def register(request):
     if request.method == 'POST':
@@ -69,3 +71,23 @@ def note_delete(request, pk):
         note.delete()
         return redirect('home')
     return render(request, 'pages/note_delete_confirm.html', {'note': note})
+
+
+# API
+class NoteListCreateAPI(generics.ListCreateAPIView):
+    serializer_class = NoteSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Note.objects.filter(user=self.request.user).order_by('-updated_at')
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+
+class NoteRetrieveUpdateDestroyAPI(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = NoteSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Note.objects.filter(user=self.request.user)
