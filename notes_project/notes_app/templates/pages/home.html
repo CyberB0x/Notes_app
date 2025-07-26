@@ -21,4 +21,16 @@
 {% else %}
   <p>You have no notes yet.</p>
 {% endif %}
+
+<script>
+  async function fetchNotes() {
+    const response = await fetch('/api/notes/');
+    const data = await response.json();
+    console.log('Your notes from API:', data);
+    alert(`You have ${data.length} notes`);
+  }
+</script>
+
+<button onclick="fetchNotes()" class="btn btn-info my-3">📡 Get Notes via API</button>
+
 {% endblock %}

@@ -40,6 +40,8 @@ INSTALLED_APPS = [
 
     # our app
     'notes_app',
+    'rest_framework',
+
 ]
 
 MIDDLEWARE = [
