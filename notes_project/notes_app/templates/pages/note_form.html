@@ -1,0 +1,18 @@
+{% extends 'pages/base.html' %}
+{% block title %}{{ action }} Note{% endblock %}
+{% block content %}
+<h2>{{ action }} Note</h2>
+<form method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="title" class="form-label">Title</label>
+      <input id="title" name="title" class="form-control" value="{{ note.title|default_if_none:'' }}" required>
+    </div>
+    <div class="mb-3">
+      <label for="content" class="form-label">Content</label>
+      <textarea id="content" name="content" class="form-control" rows="6">{{ note.content|default_if_none:'' }}</textarea>
+    </div>
+    <button class="btn btn-primary" type="submit">{{ action }}</button>
+    <a href="{% url 'home' %}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}
